@@ -1,5 +1,5 @@
 <h1 align="center">
-Building Tree Census Dashboard with RShiny App
+Building Tree Census Dashboard with R Shiny
 </h1>
 <p align="center">
 <img src= "https://i.pinimg.com/originals/26/c2/ab/26c2ab08e01bb8205bf40502fb7aea6b.jpg" 
