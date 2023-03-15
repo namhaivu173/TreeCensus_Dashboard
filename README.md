@@ -25,7 +25,7 @@ The dashboard can be viewed in 2 ways:
 ## II. Main goals:
 
 - Analyze and explore interesting insights about the tree census dataset via effective visualizations
-- Practice designing RShiny applications and deploy to shinyapps.io
+- Practice designing R Shiny applications and deploy dashboard to shinyapps.io
 
 ## III. Files shared:
 
