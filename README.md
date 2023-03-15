@@ -7,6 +7,7 @@ alt="" title="Image Source: https://www.pinterest.com/pin/137500594847520243/" w
 </p>
 <p align="center">
 <sup><i>(Image Source: https://www.pinterest.com/pin/137500594847520243/)</i></sup>
+<!--- <sup><i><a href="https://www.pinterest.com/pin/137500594847520243">Image Source</a></i></sup> --->
 </p>
 
 The dashboard can be viewed in 2 ways:
@@ -14,7 +15,7 @@ The dashboard can be viewed in 2 ways:
 - Locally using RStudio: ``shiny::runGitHub(repo = "TreeCensus_Dashboard", username = "namhaivu173", ref = "main")``
 
 <p>
-<i>Note: Due to the limited memory size allowed on Shinyapps.io, only a portion of the original data set is used for building this dashboard.</i>
+<b><i>Note: Due to the limited memory size allowed on Shinyapps.io, only a portion of the original data set is used for building this dashboard.</i></b>
 </p>
 
 ## I. Data set:
