@@ -9,8 +9,9 @@ alt="" title="Image Source: https://www.pinterest.com/pin/137500594847520243/" w
 <sup><i>(Image Source: https://www.pinterest.com/pin/137500594847520243/)</i></sup>
 </p>
 
-The dashboard can be viewed online here:<br>
-https://hainamvu.shinyapps.io/TreeCensus_Dashboard/
+The dashboard can be viewed in 2 ways:
+- Online using Shinyapps.io: https://hainamvu.shinyapps.io/TreeCensus_Dashboard/
+- Locally using RStudio: ``shiny::runGitHub(repo = "TreeCensus_Dashboard", username = "namhaivu173", ref = "main")``
 
 <p>
 <i>Note: Due to the limited memory size allowed on Shinyapps.io, only a portion of the original data set is used for building this dashboard.</i>
