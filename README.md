@@ -33,5 +33,5 @@ The dashboard can be viewed in 2 ways:
 - .pdf: contains variable dictionary for the data set
 - Compressed_data.ipynb: contains script that produce a sample data set from the original data set
 - .csv: a portion of the original data set produced using the Python script
-- app.r: contains script for the RShiny app
+- app.r: contains script for the R Shiny app
 - local.r: contains script that enable the app deployment locally
