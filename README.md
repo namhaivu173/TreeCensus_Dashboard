@@ -3,7 +3,7 @@ Building Tree Census Dashboard with R Shiny
 </h1>
 <p align="center">
 <img src= "https://i.pinimg.com/originals/26/c2/ab/26c2ab08e01bb8205bf40502fb7aea6b.jpg" 
-alt="" title="Image Source: https://www.pinterest.com/pin/137500594847520243/" width="60%" height="60%">
+alt="" title="Image Source: https://www.pinterest.com/pin/137500594847520243/" width="65%" height="60%">
 </p>
 <p align="center">
 <sup><i>(Image Source: https://www.pinterest.com/pin/137500594847520243/)</i></sup>
@@ -20,7 +20,7 @@ The dashboard can be viewed in 2 ways:
 
 ## I. Data set:
 - Downloaded from NYC Open Data: https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh
-- The 2015 New York (NY) tree census data set contains various features of trees planted in NY including but not limited to location details, trunk diameter, perception of health, etc.
+- The 2015 New York (NY) tree census data set contains various features of trees planted in NY, including but not limited to location details, trunk diameter, perception of health, etc.
 
 ## II. Main goals:
 
