@@ -18,6 +18,9 @@ library(shinydashboard)
 library(timeDate)
 library(rsconnect)
 library(shinyWidgets)
+library(sf)
+library(mapview)
+library(leaflet)
 
 # Find which loaded packages are not used
 # used.functions <- NCmisc::list.functions.in.file(filename = "app.R", alphabetic = FALSE)
@@ -44,32 +47,49 @@ library(shinyWidgets)
 #-------------------------------------------
 
 # Import data
-#df_tree <- read.csv(unz("2015_Street_Tree_Census_-_Tree_Data_sample.zip", "2015_Street_Tree_Census_-_Tree_Data_sample.csv"))
-#df_tree1 <- sample_n(df_tree, size=50000, random_state=99)
+# df_tree <- read.csv(unz("2015_Street_Tree_Census_-_Tree_Data_sample.zip",
+#                         "2015_Street_Tree_Census_-_Tree_Data_sample.csv"))
 df_tree <- read.csv("2015_Street_Tree_Census_-_Tree_Data_sample.csv",stringsAsFactors=FALSE)
-
 
 # Create datetime features
 df_census <- na.omit(df_tree)
 df_census$created_at <- as.Date(df_census$created_at,format="%Y-%m-%d")
 df_census$Year <- as.numeric(format(df_census$created_at,"%Y"))
 df_census$Month <- as.numeric(format(df_census$created_at,"%m"))
-#df_census$Month_Yr <- with(df_census, sprintf("%02d-%d", Month, Year))
+# df_census$Month_Yr <- with(df_census, sprintf("%02d-%d", Month, Year))
 df_census$year_month <- as.Date(timeFirstDayInMonth(df_census$created_at))
 
 # Rename values of categorical features
 df_census$health[df_census$health == ""] <- "Dead/Stump"
+df_census$health <- factor(df_census$health, levels = c("Dead/Stump","Poor","Fair","Good"))
 df_census$sidewalk[df_census$sidewalk == ""] <- "Not Applicable"
 df_census$guards[df_census$guards == ""] <- "Not Applicable"
 df_census$spc_common[df_census$spc_common == ""] <- "Others"
 df_census$problems[df_census$problems == ""] <- "Others"
 df_census$steward[df_census$steward == ""] <- "Not Applicable"
-df_census$health <- factor(df_census$health, levels = c("Dead/Stump","Poor","Fair","Good"))
 
 # Create tree diameter feature
 df_census$diam <- df_census$tree_dbh + df_census$stump_diam
+
+# Subset needed features
 df_census <- subset(df_census, 
-                    select = c(created_at, tree_dbh, curb_loc, status, user_type, health, zip_city, spc_common, year_month, borough, problems, guards, steward, diam, nta_name))
+                    select = c(created_at, tree_dbh, curb_loc, status, user_type, health, zip_city, spc_common, year_month, borough, problems, guards, steward, diam, nta_name, longitude, latitude))
+
+# Readjust value of longitude and latitude
+set.seed(99)
+df_census$random_num <- sample(runif(nrow(df_census), min = -0.1, max = 0.1), size = nrow(df_census), replace = TRUE)
+df_census$longitude_adj <- df_census$longitude + df_census$random_num
+df_census$latitude_adj <- df_census$latitude + df_census$random_num
+
+# Test map plot:
+# df_census2 <- sample_n(df_census, 1000)
+# mapview(df_census2, 
+#         xcol = "longitude_adj", ycol = "latitude_adj", zcol= "health", label="spc_common",
+#         color=list("darkred","yellow","lightgreen","darkgreen"), 
+#         col.region=list("darkred","yellow","lightgreen","darkgreen"), 
+#         homebutton=F, use.layer.names = T, layer.name = "Tree Data",
+#         grid = FALSE, cex="diam", crs = 4326, legend=T, #maxpoints = 50,
+#         map.types = c('CartoDB.Positron','OpenStreetMap'))
 
 # Define %notin% function
 `%notin%` <- Negate(`%in%`)
@@ -77,9 +97,13 @@ df_census <- subset(df_census,
 # Function that moves a row to last of table 
 move_to_last <- function(df, n) df[c(setdiff(seq_len(nrow(df)), n), n), ]
 
+# Mapview to leaflet function
+mapview2leaflet = function(x) {
+  methods::slot(x, "map")
+}
+
 # Remove unused data
 rm(df_tree)
-#rm(df_tree1)
 
 #-------------------------------------------
 # UI section:
@@ -88,6 +112,7 @@ css <- HTML("
 h4{font-size: 15px;
    text-indent: 2em;
    padding-left: -2em;}
+div.info.legend.leaflet-control br {clear: both;}
 ")
 
 # .bs-deselect-all{display: none;}
@@ -104,6 +129,7 @@ ui <- dashboardPage(
   ),
   dashboardBody(
     tags$head(tags$style(css)),
+    #tags$style(type="text/css", "div.info.legend.leaflet-control br {clear: both;}"),
     tabItems(
       tabItem(
         
@@ -216,8 +242,14 @@ ui <- dashboardPage(
                     tabPanel("Tree Health",
                              box(title = "Histogram showing tree diameter by health conditions",
                                  status = "primary", solidHeader = T,
-                                 collapsible = F, width = 12,
-                                 column(12, align="center", plotOutput("treeHealth", width="100%")))
+                                 collapsible = T, width = 12,
+                                 column(12, align="center", plotOutput("treeHealth", width="100%"))),
+                             box(title = "Map showing tree location with health conditions (interactive)",
+                                 status = "primary", solidHeader = T,
+                                 collapsible = T, width = 12,
+                                 column(12, align="left", leafletOutput("treeHealth_map", width="100%", height=500)),
+                                 h5(HTML("<i><br>Size of circles represents tree diameters</i>"), 
+                                    align="center", style = "color: black")),
                              ),
                     # Tab panel 5
                     tabPanel("Tree Problem",
@@ -416,11 +448,10 @@ server <-
       return(spc_freq)
     })
     
-    # df for health plot
+    # df for map health plot
     df_treeHealth <- reactive({
-      health1 <- dplyr::count(finalTreeData(), health, sort = TRUE)
-      piepercent <- round(100*health1$n/sum(health1$n), 1)
-      health_df <- data.frame(health1,piepercent)
+      set.seed(99)
+      health_df <- sample_n(finalTreeData(), 1000)
       return(health_df)
     })
     
@@ -516,6 +547,19 @@ server <-
         labs(fill="Tree Health")
       return(p)
       
+    })
+    
+    # Build map plot    
+    output$treeHealth_map <- renderLeaflet({
+      health_df <- df_treeHealth()
+      p <- mapview(health_df, 
+              xcol = "longitude_adj", ycol = "latitude_adj", zcol= "health", label="spc_common",
+              #color=list("darkred","yellow","lightgreen","darkgreen"), 
+              col.regions=list("darkred","yellow","lightgreen","darkgreen"), 
+              homebutton=F, use.layer.names = T, layer.name = "Tree Health",
+              grid = FALSE, cex="diam", crs = 4326, legend=T, #maxpoints = 50,
+              map.types = c('OpenStreetMap','CartoDB.Positron','OpenTopoMap'))
+      return(mapview2leaflet(p))
     })
     
     # build problem plot
