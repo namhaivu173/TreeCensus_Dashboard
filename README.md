@@ -36,4 +36,4 @@ The dashboard can be viewed in 2 ways:
 - Compressed_data.ipynb: contains script that produce a sample data set from the original data set
 - .csv: a portion of the original data set produced using the Python script
 - app.r: contains script for the R Shiny app
-- local.r: contains script that enable the app deployment locally
+- local.r: contains script that deploys the R Shiny app by connecting to GitHub repo
