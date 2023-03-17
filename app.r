@@ -84,6 +84,8 @@ df_census$random_num2 <- sample(runif(nrow(df_census), min = -0.1, max = 0.1), s
 df_census$longitude_adj <- df_census$longitude + 0.3*df_census$random_num
 df_census$latitude_adj <- df_census$latitude + 0.3*df_census$random_num2
 
+df_census$health[df_census$health %in% list("Good")]
+
 # Test map plot:
 # df_census2 <- sample_n(df_census, 2000)
 # mapview(df_census2,
@@ -255,7 +257,7 @@ ui <- dashboardPage(
                                  fluidRow(
                                    align="center",
                                    # Select number of trees
-                                   sliderInput("num_tree","Select number of trees to plot",
+                                   sliderInput("num_tree","Select total number of trees to plot",
                                                min=100, max=2000, value=1000,
                                                step=1, width = "40%")),
                                    column(12, align="left", leafletOutput("treeHealth_map", width="100%", height=500)),
@@ -462,8 +464,17 @@ server <-
     
     # df for map health plot
     df_treeHealth <- reactive({
+      req(input$num_tree, input$dateRange, input$borough, input$Curb, input$user_type, input$tree_health)
       set.seed(99)
-      health_df <- sample_n(finalTreeData(), input$num_tree)
+      health_df <- sample_n(df_census, input$num_tree)
+      health_df <- filter(health_df, 
+                           curb_loc %in% input$Curb & 
+                           user_type %in% input$user_type & 
+                           health %in% input$tree_health & 
+                           borough %in% input$borough &
+                           between(as.Date.character(created_at,"%Y-%m-%d"), 
+                                   as.Date.character(input$dateRange[1],"%Y-%m-%d"), 
+                                   as.Date.character(input$dateRange[2],"%Y-%m-%d")))
       return(health_df)
     })
     
@@ -541,6 +552,9 @@ server <-
     
     # build health plot
     output$treeHealth <-renderPlot({
+      myColors <- brewer.pal(4,"Dark2")
+      names(myColors) <- c("Good","Fair","Poor","Dead/Stump")
+      
       p <- ggplot(finalTreeData(), aes(x=diam, fill=reorder(health, new.order=c("Good","Fair","Poor","Dead/Stump")))) +
         geom_histogram(alpha=0.5, position = "identity") + # color="#e9ecef"
         theme_light() +
@@ -551,8 +565,8 @@ server <-
               legend.title=element_text(size=12),
               panel.grid.minor.x = element_blank(),
               panel.grid.minor.y = element_blank()) + 
-        scale_fill_brewer(palette = "Dark2") +
-        #scale_fill_manual(values=c("darkgreen","lightgreen","yellow","darkred")) +
+        #scale_fill_brewer(palette = "Dark2") +
+        scale_fill_manual(values = myColors) +
         xlab("\nTree Diameter (in)") +
         xlim(0,50) +
         ylab("Count\n") +
@@ -565,11 +579,14 @@ server <-
     output$treeHealth_map <- renderLeaflet({
       health_df <- df_treeHealth()
       health_df$health <- factor(health_df$health, levels = c("Good","Fair","Poor","Dead/Stump"))
+      colPallete <- leaflet::colorFactor(palette = brewer.pal(4,"Dark2"), 
+                                         levels = c("Good","Fair","Poor","Dead/Stump"))
+      
       p <- mapview(health_df, 
               xcol = "longitude_adj", ycol = "latitude_adj", zcol= "health", label="spc_common",
               #color=list("darkred","yellow","lightgreen","darkgreen"), 
-              #col.regions=list("darkred","yellow","lightgreen","darkgreen"), 
-              col.regions=brewer.pal(4,"Dark2"), 
+              #col.regions=list("darkred","yellow","lightgreen","darkgreen"),
+              col.regions= colPallete(health_df$health), #brewer.pal(4,"Dark2"),
               homebutton=F, use.layer.names = T, layer.name = "Tree Health",
               grid = FALSE, cex="diam", crs = 4326, legend=T, #maxpoints = 50,
               map.types = c('OpenStreetMap','CartoDB.Positron','OpenTopoMap'))
@@ -645,7 +662,7 @@ server <-
               panel.grid.minor.x = element_blank()) + 
         xlab("Number of Stewardship Observations\n") +
         ylab("\nFrequencies") +
-        scale_fill_gradient2(low = "ivory2", mid="lightpink1", high = "pink4", midpoint=mean(df_measureTreeHealth2()$freq)) +
+        scale_fill_gradient2(low = "ivory2", mid="lightpink", high = "pink3", midpoint=mean(df_measureTreeHealth2()$freq)) +
         labs(fill="Frequency")
       
       return(p)
