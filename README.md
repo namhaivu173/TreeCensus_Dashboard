@@ -14,7 +14,7 @@ The dashboard can be viewed in 2 ways:
 - Online using Shinyapps.io: https://hainamvu.shinyapps.io/TreeCensus_Dashboard/
 - Remotely using RStudio: 
   - Install & load the "shiny" package: ``install.packages("shiny")`` and ``library(shiny)``
-  - Connect to Shiny app on GitHub: ``shiny::runGitHub(repo = "TreeCensus_Dashboard", username = "namhaivu173", ref = "main")``
+  - Run Shiny app on GitHub: ``shiny::runGitHub(repo = "TreeCensus_Dashboard", username = "namhaivu173", ref = "main")``
 
 <p>
 <b><i>Note: Due to the limited memory size allowed on Shinyapps.io, only a portion of the original data set is used for building this dashboard.</i></b>
