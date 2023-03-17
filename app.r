@@ -178,7 +178,7 @@ ui <- dashboardPage(
                               choices=list("On Curb" = "OnCurb",
                                            "Offset From Curb" = "OffsetFromCurb"), 
                               options = list(`actions-box` = TRUE),
-                              selected = "OnCurb",
+                              selected = c("OnCurb", "OffsetFromCurb"),
                               multiple = T),
                   # Select user type
                   hr(),
@@ -187,7 +187,7 @@ ui <- dashboardPage(
                                            "Trees Count Staff" = "TreesCount Staff",
                                            "Volunteer" = "Volunteer"), 
                               options = list(`actions-box` = TRUE),
-                              selected = "NYC Parks Staff",
+                              selected = c("NYC Parks Staff", "TreesCount Staff", "Volunteer"),
                               multiple = T),
                 ),
                 
@@ -579,9 +579,9 @@ server <-
     # build problem plot
     output$probTreeHealth <- renderPlot({
 
-      p <-  ggplot(df_probTreeHealth(), aes(x=reorder(problems,-freq), y=freq/1000, fill=freq/1000)) +
+      p <-  ggplot(df_probTreeHealth(), aes(x=reorder(problems,-freq), y=freq, fill=freq)) +
           geom_bar(stat="identity") +
-          geom_text(aes(label = round(freq/1000,1)),col="black",size=4,vjust=-0.5) +
+          geom_text(aes(label = round(freq)),col="black",size=4,vjust=-0.5) +
           theme_light() +
           theme(legend.position="right", 
                 axis.text=element_text(size=14),
@@ -594,7 +594,7 @@ server <-
                 axis.text.x = element_text(angle=45, vjust=1, hjust=1)) + 
           # scale_fill_gradient2(low = "lightgray", mid="lightskyblue", high = "dodgerblue4", midpoint=median(head(health_df1$freq,10))/1000) +
           scale_fill_viridis(discrete=F, option="D", direction=-1) +
-          labs(x="\nTop 10 Problems",y="Frequency (in thousands)\n", fill="Unit:\nthousands")
+          labs(x="\nTop 10 Problems",y="Frequency\n", fill="")
       return(p)
       
     })
