@@ -11,7 +11,6 @@ library(RColorBrewer)
 library(ggpubr)
 library(psych)
 library(treemap)
-library(gridExtra)
 library(shiny)
 library(viridis)
 library(shinydashboard)
@@ -75,18 +74,22 @@ df_census$diam <- df_census$tree_dbh + df_census$stump_diam
 df_census <- subset(df_census, 
                     select = c(created_at, tree_dbh, curb_loc, status, user_type, health, zip_city, spc_common, year_month, borough, problems, guards, steward, diam, nta_name, longitude, latitude))
 
-# Readjust value of longitude and latitude
+# Readjust values of longitude and latitude
 set.seed(99)
 df_census$random_num <- sample(runif(nrow(df_census), min = -0.1, max = 0.1), size = nrow(df_census), replace = TRUE)
-df_census$longitude_adj <- df_census$longitude + df_census$random_num
-df_census$latitude_adj <- df_census$latitude + df_census$random_num
+
+set.seed(100)
+df_census$random_num2 <- sample(runif(nrow(df_census), min = -0.1, max = 0.1), size = nrow(df_census), replace = TRUE)
+
+df_census$longitude_adj <- df_census$longitude + 0.3*df_census$random_num
+df_census$latitude_adj <- df_census$latitude + 0.3*df_census$random_num2
 
 # Test map plot:
-# df_census2 <- sample_n(df_census, 1000)
-# mapview(df_census2, 
+# df_census2 <- sample_n(df_census, 2000)
+# mapview(df_census2,
 #         xcol = "longitude_adj", ycol = "latitude_adj", zcol= "health", label="spc_common",
-#         color=list("darkred","yellow","lightgreen","darkgreen"), 
-#         col.region=list("darkred","yellow","lightgreen","darkgreen"), 
+#         color=list("darkred","yellow","lightgreen","darkgreen"),
+#         col.region=list("darkred","yellow","lightgreen","darkgreen"),
 #         homebutton=F, use.layer.names = T, layer.name = "Tree Data",
 #         grid = FALSE, cex="diam", crs = 4326, legend=T, #maxpoints = 50,
 #         map.types = c('CartoDB.Positron','OpenStreetMap'))
@@ -190,7 +193,7 @@ ui <- dashboardPage(
                 
                 # Show a plot of the generated distribution
                 mainPanel( 
-                  uiOutput("img1"), #img(src = "www/Tree.jpg", height = 100, width = 600), 
+                  uiOutput("img1"), #img(src = "abc.jpg", height = 100, width = 600), 
                   tabsetPanel(
                     
                     # Tab panel 1
@@ -206,7 +209,7 @@ ui <- dashboardPage(
                              div(" 6) Summary: Shares summarized insights of the dashboard", style = "color: forestgreen"), 
                              
                              h3(HTML("<b>Message to remember:</b>"),align = "left", style = "color: #D21500"),
-                             uiOutput("img2"), #img(src = "maxresdefault.jpg", height = 200, align ="center",width = 600),
+                             uiOutput("img2"), #img(src = "abc.jpg", height = 200, align ="center",width = 600),
                              h5(HTML(paste0("<b>","***PLANT TREES, SAVE LIVES***","</b>")),align = "center"),
                              hr(),
                              # Disclaimer
@@ -240,16 +243,23 @@ ui <- dashboardPage(
                              ),
                     # Tab panel 4
                     tabPanel("Tree Health",
-                             box(title = "Histogram showing tree diameter by health conditions",
+                             box(title = "Histogram showing tree diameter distribution by health conditions",
                                  status = "primary", solidHeader = T,
                                  collapsible = T, width = 12,
                                  column(12, align="center", plotOutput("treeHealth", width="100%"))),
-                             box(title = "Map showing tree location with health conditions (interactive)",
+                             box(title = "Interactive map showing tree locations with health conditions",
                                  status = "primary", solidHeader = T,
                                  collapsible = T, width = 12,
-                                 column(12, align="left", leafletOutput("treeHealth_map", width="100%", height=500)),
-                                 h5(HTML("<i><br>Size of circles represents tree diameters</i>"), 
-                                    align="center", style = "color: black")),
+                                 fluidRow(
+                                   align="center",
+                                   # Select number of trees
+                                   sliderInput("num_tree","Select number of trees to plot",
+                                               min=100, max=2000, value=1000,
+                                               step=1, width = "40%")),
+                                   column(12, align="left", leafletOutput("treeHealth_map", width="100%", height=500)),
+                                   h5(HTML("<i>1. Size of circles represents tree diameters
+                                           <br>2. Hover/click on plotted points to see more information</i>"),
+                                      align="center", style = "color: black")),
                              ),
                     # Tab panel 5
                     tabPanel("Tree Problem",
@@ -272,7 +282,7 @@ ui <- dashboardPage(
                     # Tab panel 7
                     tabPanel("Summary", h1(HTML(paste0("<b>","Summary","</b>")), align = "center",style = "color: #906060"),
                              h4(textOutput("textDisplay2"), align="justify", style = "color:black"),
-                             uiOutput("img3")) #img(src = "save_image.jpg", height = 200, align ="center",width = 500))
+                             uiOutput("img3")) #img(src = "abc.jpg", height = 200, align ="center",width = 500))
                   )
                 )
               )
@@ -451,7 +461,7 @@ server <-
     # df for map health plot
     df_treeHealth <- reactive({
       set.seed(99)
-      health_df <- sample_n(finalTreeData(), 1000)
+      health_df <- sample_n(finalTreeData(), input$num_tree)
       return(health_df)
     })
     
@@ -522,7 +532,7 @@ server <-
         xlab("Top 10 Species\n") +
         ylab("\nCount") +
         #scale_fill_viridis(discrete=F, option="C", direction=-1) +
-        scale_fill_gradient(low = "grey", high = "darkgreen") +
+        scale_fill_gradient(low = "grey", high = "forestgreen") +
         labs(fill="Frequency")
       return(p)
     }) 
@@ -531,7 +541,6 @@ server <-
     output$treeHealth <-renderPlot({
       p <- ggplot(finalTreeData(), aes(x=diam, fill=reorder(health, new.order=c("Good","Fair","Poor","Dead/Stump")))) +
         geom_histogram(alpha=0.5, position = "identity") + # color="#e9ecef"
-        #scale_fill_manual(values=c("#69b3a2", "#404080")) +
         theme_light() +
         theme(legend.position="right", 
               axis.text=element_text(size=14),
@@ -541,6 +550,7 @@ server <-
               panel.grid.minor.x = element_blank(),
               panel.grid.minor.y = element_blank()) + 
         scale_fill_brewer(palette = "Dark2") +
+        #scale_fill_manual(values=c("darkgreen","lightgreen","yellow","darkred")) +
         xlab("\nTree Diameter (in)") +
         xlim(0,50) +
         ylab("Count\n") +
@@ -552,10 +562,12 @@ server <-
     # Build map plot    
     output$treeHealth_map <- renderLeaflet({
       health_df <- df_treeHealth()
+      health_df$health <- factor(health_df$health, levels = c("Good","Fair","Poor","Dead/Stump"))
       p <- mapview(health_df, 
               xcol = "longitude_adj", ycol = "latitude_adj", zcol= "health", label="spc_common",
               #color=list("darkred","yellow","lightgreen","darkgreen"), 
-              col.regions=list("darkred","yellow","lightgreen","darkgreen"), 
+              #col.regions=list("darkred","yellow","lightgreen","darkgreen"), 
+              col.regions=brewer.pal(4,"Dark2"), 
               homebutton=F, use.layer.names = T, layer.name = "Tree Health",
               grid = FALSE, cex="diam", crs = 4326, legend=T, #maxpoints = 50,
               map.types = c('OpenStreetMap','CartoDB.Positron','OpenTopoMap'))
