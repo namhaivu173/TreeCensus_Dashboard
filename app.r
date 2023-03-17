@@ -197,26 +197,28 @@ ui <- dashboardPage(
                   tabsetPanel(
                     
                     # Tab panel 1
-                    tabPanel("About", h1(HTML(paste0("<b>","Introduction","</b>")), align = "center",style = "color: #906060"),
-                             h4(textOutput("textDisplay1"), align="justify", style = "color: black"),
+                    tabPanel("About", h1(HTML("<b>Introduction</b>"), align = "center",style = "color: #906060"),
+                             h4(#textOutput("textDisplay1"),
+                                'This project covers the analysis of the 2015 New York (NY) tree census data set, which contains various features of trees planted in NY including but not limited to location details, diameter, health conditions, etc. This data was collected by volunteers and staff organized by NYC Parks & Recreation and partner organizations. The tree census aids in the study of street tree density over a period of time, and suggests actionable insights for the city council to consider. The objective of this dashboard is to analyze and explore deeper insights about the tree census dataset through effective visualizations. ', a(HTML("<u>Click here to see more information about the data set from NYC Open Data.</u>"), href= "https://data.cityofnewyork.us/Environment/2015-Street-Tree-Census-Tree-Data/uvpi-gqnh", target="_blank"),
+                                align="justify", style = "color: black"),
                              
                              h3(HTML("<b>Tab Information:</b>"), align = "left", style = "color: dodgerblue" ), 
                              div(" 1) Overview: Presents a quick overview of tree density in NYC", style = "color: forestgreen"), 
                              div(" 2) Tree Species: Shows top 10 species in each Borough", style = "color: forestgreen"), 
-                             div(" 3) Tree Health: Shows the tree health status based on the percentage", style = "color: forestgreen"),  
+                             div(" 3) Tree Health: Shows the tree health status using histogram and interactive map", style = "color: forestgreen"),  
                              div(" 4) Tree Problem: Shows top problems that are impacting the tree health", style = "color: forestgreen"), 
-                             div(" 5) Tree Protection: Shows the best measure to be taken to ensure trees' good health", style = "color: forestgreen"),  
+                             div(" 5) Tree Protection: Shows the top measures taken to ensure trees' good health", style = "color: forestgreen"),  
                              div(" 6) Summary: Shares summarized insights of the dashboard", style = "color: forestgreen"), 
                              
                              h3(HTML("<b>Message to remember:</b>"),align = "left", style = "color: #D21500"),
                              uiOutput("img2"), #img(src = "abc.jpg", height = 200, align ="center",width = 600),
-                             h5(HTML(paste0("<b>","***PLANT TREES, SAVE LIVES***","</b>")),align = "center"),
+                             h5(HTML("<b>***PLANT TREES, SAVE LIVES***</b>"),align = "center"),
                              hr(),
                              # Disclaimer
                              h5(htmlOutput("disclaimer1"), align="center", style = "color: black"),
                     ),
                     # Tab panel 2
-                    tabPanel("Overview", helpText("This section is to show the count of various trees present at different parts of New York city. The tables below contain such information:"),
+                    tabPanel("Overview", helpText("This section is to show the count of trees by different geological locations and characteristics. The tables below contain such information:"),
                              box(title = "Count of trees by borough",
                                  status = "primary", solidHeader = T,
                                  collapsible = T, width = 12,
@@ -280,7 +282,7 @@ ui <- dashboardPage(
                                  column(12, align="center", plotOutput("measureTreeHealth2")))
                              ),
                     # Tab panel 7
-                    tabPanel("Summary", h1(HTML(paste0("<b>","Summary","</b>")), align = "center",style = "color: #906060"),
+                    tabPanel("Summary", h1(HTML("<b>Summary</b>"), align = "center",style = "color: #906060"),
                              h4(textOutput("textDisplay2"), align="justify", style = "color:black"),
                              uiOutput("img3")) #img(src = "abc.jpg", height = 200, align ="center",width = 500))
                   )
