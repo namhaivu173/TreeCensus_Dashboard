@@ -84,9 +84,9 @@ df_census$random_num2 <- sample(runif(nrow(df_census), min = -0.1, max = 0.1), s
 df_census$longitude_adj <- df_census$longitude + 0.3*df_census$random_num
 df_census$latitude_adj <- df_census$latitude + 0.3*df_census$random_num2
 
-df_census$health[df_census$health %in% list("Good")]
 
 # Test map plot:
+#df_census$health[df_census$health %in% list("Good")]
 # df_census2 <- sample_n(df_census, 2000)
 # mapview(df_census2,
 #         xcol = "longitude_adj", ycol = "latitude_adj", zcol= "health", label="spc_common",
