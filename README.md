@@ -11,7 +11,7 @@ alt="" title="Image Source: https://www.pinterest.com/pin/137500594847520243/" w
 </p>
 
 The dashboard can be viewed in 2 ways:
-- Online using Shinyapps.io: https://hainamvu.shinyapps.io/TreeCensus_Dashboard/
+- Online using Shinyapps.io by clicking the icon [![](https://img.shields.io/badge/Shiny-shinyapps.io-blue?style=flat&labelColor=white&logo=RStudio&logoColor=blue)](https://hainamvu.shinyapps.io/TreeCensus_Dashboard/) 
 - Remotely using RStudio: 
   - Install & load the "shiny" package: ``install.packages("shiny")`` and ``library(shiny)``
   - Run Shiny app from GitHub: ``shiny::runGitHub(repo = "TreeCensus_Dashboard", username = "namhaivu173", ref = "main")``
