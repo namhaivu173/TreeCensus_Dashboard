@@ -37,3 +37,13 @@ The dashboard can be viewed in 2 ways:
 - .csv: a portion of the original data set produced using the Python script
 - app.r: contains script for the R Shiny app
 - local.r: contains script that deploys the R Shiny app by connecting to GitHub repo
+
+## IV. Glimpse of Shiny dashboard UI:
+![screen1](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s1.PNG)
+![screen2](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s2.PNG)
+![screen3](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s3.PNG)
+![screen4](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s4.PNG)
+
+
+
+
