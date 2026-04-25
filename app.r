@@ -705,9 +705,9 @@ server <-
       health_tabl
     }, align='l', striped=T, bordered=T)
     
-    # import images
+    # import images (https://www.scenic.org/wp-content/uploads/2019/10/tree-preservation-slide.jpg)
     output$img1 <- renderUI({
-      tags$img(src = "https://www.scenic.org/wp-content/uploads/2019/10/tree-preservation-slide.jpg", height=150, width="100%")
+      tags$img(src = "https://news.iium.edu.my/wp-content/uploads/2021/06/c2a5283be51945c8bd6dfa8ea70c0e5d.jpg", height=150, width="100%")
     })
     
     output$img2 <- renderUI({
