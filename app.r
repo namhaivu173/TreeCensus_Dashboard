@@ -711,7 +711,7 @@ server <-
     })
     
     output$img2 <- renderUI({
-      tags$img(src = "https://news.iium.edu.my/wp-content/uploads/2021/06/c2a5283be51945c8bd6dfa8ea70c0e5d.jpg", height=300, width="100%")
+      tags$img(src = "tree_planting.jpeg", height=400, width="100%")
     })
     
     output$img3 <- renderUI({
