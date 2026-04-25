@@ -711,7 +711,7 @@ server <-
     })
     
     output$img2 <- renderUI({
-      tags$img(src = "tree_planting.jpeg", height=400, width="100%")
+      tags$img(src = "https://dailyasianage.com/library/1636919879_3.jpg", height=300, width="100%")
     })
     
     output$img3 <- renderUI({
