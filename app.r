@@ -711,7 +711,7 @@ server <-
     })
     
     output$img2 <- renderUI({
-      tags$img(src = "https://vavista.com/wp-content/uploads/2020/03/Tree-Planting--750x400.jpeg", height=400, width="100%")
+      tags$img(src = "tree_planting.jpeg", height=400, width="100%")
     })
     
     output$img3 <- renderUI({
