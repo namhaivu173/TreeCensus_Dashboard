@@ -711,7 +711,7 @@ server <-
     })
     
     output$img2 <- renderUI({
-      tags$img(src = "tree_planting.jpeg", height=400, width="100%")
+      tags$img(src = "https://www.scenic.org/wp-content/uploads/2019/10/tree-preservation-slide.jpg", height=300, width="100%")
     })
     
     output$img3 <- renderUI({
