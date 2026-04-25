@@ -711,7 +711,7 @@ server <-
     })
     
     output$img2 <- renderUI({
-      tags$img(src = "https://youmatter.world/app/uploads/sites/2/2018/10/climate-change-definition-meaning.jpg", height=300, width="100%")
+      tags$img(src = "https://vavista.com/wp-content/uploads/2020/03/Tree-Planting--750x400.jpeg", height=400, width="100%")
     })
     
     output$img3 <- renderUI({
