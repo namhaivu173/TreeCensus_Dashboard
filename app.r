@@ -213,7 +213,8 @@ ui <- dashboardPage(
                              div(" 6) Summary: Shares summarized insights of the dashboard", style = "color: forestgreen"), 
                              
                              h3(HTML("<b>Message to remember:</b>"),align = "left", style = "color: #D21500"),
-                             uiOutput("img2"), #img(src = "abc.jpg", height = 200, align ="center",width = 600),
+                             # uiOutput("img2"), 
+                             img(src = "tree_planting.jpg", height = 400, width = "100%", align ="center"),
                              h5(HTML("<b>***PLANT TREES, SAVE LIVES***</b>"),align = "center"),
                              hr(),
                              # Disclaimer
