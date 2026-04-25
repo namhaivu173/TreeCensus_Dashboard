@@ -214,7 +214,7 @@ ui <- dashboardPage(
                              
                              h3(HTML("<b>Message to remember:</b>"),align = "left", style = "color: #D21500"),
                              uiOutput("img2"),
-                             img(src = "tree_planting.jpeg", height = 400, width = "100%", align ="center"),
+                             # img(src = "tree_planting.jpeg", height = 400, width = "100%", align ="center"),
                              h5(HTML("<b>***PLANT TREES, SAVE LIVES***</b>"),align = "center"),
                              hr(),
                              # Disclaimer
@@ -712,7 +712,7 @@ server <-
     })
     
     output$img2 <- renderUI({
-      tags$img(src = "https://chopmytree.com/wp-content/uploads/2020/01/nonprofitblogphoto.png", height=300, width="100%")
+      tags$img(src = "https://chopmytree.com/wp-content/uploads/2020/01/nonprofitblogphoto.png", height=400, width="100%")
     })
     
     output$img3 <- renderUI({
