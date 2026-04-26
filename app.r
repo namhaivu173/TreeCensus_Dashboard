@@ -20,6 +20,8 @@ library(shinyWidgets)
 library(sf)
 library(mapview)
 library(leaflet)
+library(rmarkdown)
+library(xfun)
 
 # Find which loaded packages are not used
 # used.functions <- NCmisc::list.functions.in.file(filename = "app.R", alphabetic = FALSE)
@@ -83,18 +85,6 @@ df_census$random_num2 <- sample(runif(nrow(df_census), min = -0.1, max = 0.1), s
 
 df_census$longitude_adj <- df_census$longitude + 0.3*df_census$random_num
 df_census$latitude_adj <- df_census$latitude + 0.3*df_census$random_num2
-
-
-# Test map plot:
-#df_census$health[df_census$health %in% list("Good")]
-# df_census2 <- sample_n(df_census, 2000)
-# mapview(df_census2,
-#         xcol = "longitude_adj", ycol = "latitude_adj", zcol= "health", label="spc_common",
-#         color=list("darkred","yellow","lightgreen","darkgreen"),
-#         col.region=list("darkred","yellow","lightgreen","darkgreen"),
-#         homebutton=F, use.layer.names = T, layer.name = "Tree Data",
-#         grid = FALSE, cex="diam", crs = 4326, legend=T, #maxpoints = 50,
-#         map.types = c('CartoDB.Positron','OpenStreetMap'))
 
 # Define %notin% function
 `%notin%` <- Negate(`%in%`)
@@ -195,7 +185,8 @@ ui <- dashboardPage(
                 
                 # Show a plot of the generated distribution
                 mainPanel( 
-                  uiOutput("img1"), #img(src = "abc.jpg", height = 100, width = 600), 
+                  # uiOutput("img1"),
+                  img(src = "tree-preservation-slide.jpg", height = 150, width = "100%", align ="center"),
                   tabsetPanel(
                     
                     # Tab panel 1
@@ -213,8 +204,8 @@ ui <- dashboardPage(
                              div(" 6) Summary: Shares summarized insights of the dashboard", style = "color: forestgreen"), 
                              
                              h3(HTML("<b>Message to remember:</b>"),align = "left", style = "color: #D21500"),
-                             uiOutput("img2"),
-                             # img(src = "tree_planting.jpeg", height = 400, width = "100%", align ="center"),
+                             # uiOutput("img2"),
+                             img(src = "tree_planting.jpeg", height = 400, width = "100%", align ="center"),
                              h5(HTML("<b>***PLANT TREES, SAVE LIVES***</b>"),align = "center"),
                              hr(),
                              # Disclaimer
@@ -287,7 +278,9 @@ ui <- dashboardPage(
                     # Tab panel 7
                     tabPanel("Summary", h1(HTML("<b>Summary</b>"), align = "center",style = "color: #906060"),
                              h4(textOutput("textDisplay2"), align="justify", style = "color:black"),
-                             uiOutput("img3")) #img(src = "abc.jpg", height = 200, align ="center",width = 500))
+                             # uiOutput("img3"),
+                             img(src = "million-trees-new-york.jpg", height = 400, width = "100%", align ="center"))
+                    
                   )
                 )
               )
@@ -706,19 +699,18 @@ server <-
       health_tabl
     }, align='l', striped=T, bordered=T)
     
-    # import images
-    output$img1 <- renderUI({
-      tags$img(src = "https://www.scenic.org/wp-content/uploads/2019/10/tree-preservation-slide.jpg", height=150, width="100%")
-    })
-    
-    output$img2 <- renderUI({
-      tags$img(src = "https://chopmytree.com/wp-content/uploads/2020/01/nonprofitblogphoto.png", height=400, width="100%")
-    })
-    
-    output$img3 <- renderUI({
-      tags$img(src = "https://media.architecturaldigest.com/photos/56a177c6f62777972f2fe407/16:9/w_3104,h_1746,c_limit/million-trees-new-york-01.jpg", height=250, width="100%")
-    })
-    
+    # import images online
+    # output$img1 <- renderUI({
+    #   tags$img(src = "https://www.scenic.org/wp-content/uploads/2019/10/tree-preservation-slide.jpg", height=150, width="100%")
+    # })
+    # 
+    # output$img2 <- renderUI({
+    #   tags$img(src = "https://chopmytree.com/wp-content/uploads/2020/01/nonprofitblogphoto.png", height=400, width="100%")
+    # })
+    # 
+    # output$img3 <- renderUI({
+    #   tags$img(src = "https://media.architecturaldigest.com/photos/56a177c6f62777972f2fe407/16:9/w_3104,h_1746,c_limit/million-trees-new-york-01.jpg", height=250, width="100%")
+    # })
     
     #-------
     # Tab 2:
