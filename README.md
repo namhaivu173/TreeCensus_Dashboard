@@ -39,10 +39,10 @@ The dashboard can be viewed in 2 ways:
 - local.r: contains script that deploys the R Shiny app by connecting to GitHub repo
 
 ## IV. Glimpse of Shiny dashboard UI:
-![screen1](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s1.PNG)
-![screen2](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s2.PNG)
-![screen3](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s3.PNG)
-![screen4](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/Dashboard%20Screenshots/s4.PNG)
+![screen1](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/app_screenshots/s1.PNG)
+![screen2](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/app_screenshots/s2.PNG)
+![screen3](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/app_screenshots/s3.PNG)
+![screen4](https://github.com/namhaivu173/TreeCensus_Dashboard/blob/main/app_screenshots/s4.PNG)
 
 
 
